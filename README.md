@@ -1,4 +1,4 @@
-# Biclique Counting under Edge Local Differential Privacy
+# (p,q)-biclique Counting under Edge Local Differential Privacy
 
 ## Overview
 
@@ -89,6 +89,13 @@ The metadata file provides essential information about the bipartite graph in th
 - `Upper Vertices Count`: The number of upper vertices.
 - `Lower Vertices Count`: The number of lower vertices.
 - `Edges Count`: The total number of edges.
+
+Example:
+```
+3
+10
+5
+```
 
 ## Example Usage
 
