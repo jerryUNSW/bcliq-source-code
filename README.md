@@ -92,16 +92,16 @@ The metadata file provides essential information about the bipartite graph in th
 
 ## Example Usage
 
-1. Run the naive algorithm to count (2,3)-bicliques for 1 round with a privacy budget epsilon = 1 on the dataset `to`:
+1. Run the naive algorithm to count (2,3)-bicliques for 1 round with a privacy budget epsilon = 1 on the dataset `unicode`:
 
 ```bash
-./biclique 1 ../bidata/to 1 0 2 3
+./biclique 1 ../bidata/unicode 1 0 2 3
 ```
 
-2. Run the one-round algorithm to count (3,2)-bicliques for 10 rounds with a privacy budget epsilon = 1 on the dataset `to`:
+2. Run the one-round algorithm to count (3,2)-bicliques for 10 rounds with a privacy budget epsilon = 1 on the dataset `unicode`:
 
 ```bash
-./biclique 1 ../bidata/to 10 1 3 2
+./biclique 1 ../bidata/unicode 10 1 3 2
 ```
 
 3. Run the advanced++ algorithm to count (3,2)-bicliques for 10 rounds with a privacy budget epsilon = 1 on the dataset `unicode`:

@@ -2807,7 +2807,7 @@ void test_f_distribution_p2(string dataset, int num_samples) {
     
     // Load dataset
     BiGraph g;
-    string filename = "/data/yizhangh/bidata/" + dataset;
+    string filename = "../bidata/" + dataset;
     g.loadGraph(filename);
     cout << "Loaded dataset: " << dataset << " with " << g.num_nodes() << " nodes" << endl;
     
