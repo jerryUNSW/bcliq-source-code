@@ -14,7 +14,7 @@ else
     LDFLAGS += -fopenmp
 endif
 DEPS = bigraph.h utility.h biclique.h
-OBJ = bigraph.o utility.o biclique.o one-round-sampling.o
+OBJ = bigraph.o utility.o biclique.o
 
 %.o: %.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) -c -o $@ $< $(CPPFLAGS)
