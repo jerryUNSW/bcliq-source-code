@@ -1,98 +1,111 @@
 # Biclique Counting under Edge Local Differential Privacy
 
+## Overview
+
 This repository contains the implementation of algorithms for counting (p,q)-bicliques in bipartite graphs under edge local differential privacy (edge LDP).
 
-## Files
+## Project Structure
 
-- `bigraph.cpp` / `bigraph.h` - Bipartite graph data structure and utilities
-- `biclique.cpp` / `biclique.h` - Core biclique counting algorithms (MRCN, MRCN+, MRCN++)
-- `utility.cpp` / `utility.h` - Utility functions for data processing
-- `one-round-sampling.cpp` - One-round sampling algorithm implementation
-- `makefile` - Build configuration
-- `include/` - Header files for dependencies
+The project consists of the following key files and directories:
 
-## Dependencies
+- `biclique.cpp` / `biclique.h`: Implementation and declarations of biclique counting algorithms under edge LDP (MRCN, MRCN+, MRCN++).
 
-- C++17 compiler (g++)
-- OpenMP
-- SQLite3
-- Standard C++ libraries
+- `bigraph.cpp` / `bigraph.h`: Functionality and data structures for handling bipartite graphs.
 
-## Compilation
+- `utility.cpp` / `utility.h`: Common utility functions shared across modules.
+
+- `include/`: Additional header files for dependencies (gcem, stats libraries).
+
+- `makefile`: Build script to compile the project using `make`.
+
+- `README.md`: Documentation with project overview and usage instructions.
+
+## Build Instructions
+
+To build the project, use the following command:
 
 ```bash
-make biclique
+make clean && make
 ```
 
 This will create the main executable `biclique`.
 
-## Usage
+## Running the Program
 
-The main executable supports various command-line options for running different algorithms:
-
-```bash
-./biclique [options]
-```
-
-### Algorithm Options
-- `--naive` - Run naive algorithm
-- `--oner` - Run OneR algorithm  
-- `--adv` - Run MRCN algorithm
-- `--advplus` - Run MRCN+ algorithm
-- `--advplusplus` - Run MRCN++ algorithm
-
-### Privacy Parameters
-- `--eps0` - Privacy budget for degree estimation (default: 0.2)
-- `--eps1` - Privacy budget for noisy graph construction (default: 0.4)  
-- `--eps2` - Privacy budget for common neighbor estimation (default: 0.4)
-
-### Graph Parameters
-- `--p` - Number of upper vertices in biclique (default: 2)
-- `--q` - Number of lower vertices in biclique (default: 2)
-- `--input` - Input graph file path
-
-### Example Commands
+To run the biclique counting program, use the following command:
 
 ```bash
-# Run MRCN++ algorithm on a graph file
-./biclique --advplusplus --p 2 --q 3 --eps0 0.2 --eps1 0.4 --eps2 0.4 --input graph.txt
-
-# Run OneR algorithm with different privacy budget
-./biclique --oner --p 2 --q 2 --eps1 0.6 --input graph.txt
-
-# Run naive baseline
-./biclique --naive --p 2 --q 3 --eps1 0.6 --input graph.txt
+./biclique <epsilon> <data_directory> <num_iterations> <algorithm_switch> <p> <q>
 ```
 
-## Input Format
+### Parameters
 
-The input graph should be in edge list format:
+- `<epsilon>`: Privacy budget for edge-local differential privacy (e.g., 1). Note: When epsilon is too large, the naive algorithm may perform unrealistically well.
+
+- `<data_directory>`: Path to the dataset directory (e.g., `../bidata/<dataset>` or `<dataset>` for `dataset.meta` and `dataset.e`).
+
+- `<num_iterations>`: Number of rounds to run the algorithm (e.g., 10). For the naive algorithm, one round is sufficient.
+
+- `<algorithm_switch>`: Specifies the algorithm to use (see options below).
+
+- `<p> <q>`: Parameters defining the size of the biclique to count (e.g., (p,q)-bicliques).
+
+## Algorithm Switch Options
+
+- **0**: Naive algorithm (single round recommended).
+
+- **1**: One-round algorithm.
+
+- **2**: The MRCN algorithm.
+
+- **3**: The MRCN algorithm + Multi-center optimization.
+
+- **4**: The MRCN algorithm + Multi-center optimization + Refined Noisy Graph Construction.
+
+## Data Format for Bipartite Graphs
+
+The program processes bipartite graph data, which consists of two files: an edge list file (`<datafile>.e`) and a metadata file (`<datafile>.meta`).
+
+When specifying the input path, use only the base name (e.g., `data`), and the program will automatically look for `data.meta` and `data.e` files.
+
+### Edge List File (`<datafile>.e`)
+
+The edge list file represents the connections between upper and lower vertices in the bipartite graph. Each line describes an edge in the format:
+
 ```
-u1 v1
-u2 v2
-...
+<upper_vertex> <lower_vertex>
 ```
-Where each line represents an edge between upper vertex `ui` and lower vertex `vi`.
 
-## Output
+### Metadata File (`<datafile>.meta`)
 
-The program outputs:
-- Estimated (p,q)-biclique count
-- Mean relative error (if ground truth is available)
-- Running time
-- Privacy budget allocation
+The metadata file provides essential information about the bipartite graph in the following format:
 
-## Testing
+```
+<upper_vertices_count>
+<lower_vertices_count>
+<edges_count>
+```
 
-To run tests with ground truth comparison:
+- `Upper Vertices Count`: The number of upper vertices.
+- `Lower Vertices Count`: The number of lower vertices.
+- `Edges Count`: The total number of edges.
+
+## Example Usage
+
+1. Run the naive algorithm to count (2,3)-bicliques for 1 round with a privacy budget epsilon = 1 on the dataset `to`:
 
 ```bash
-make testp3
-./test_p3_batch_with_ground_truth
+./biclique 1 ../bidata/to 1 0 2 3
 ```
 
-## Cleanup
+2. Run the one-round algorithm to count (3,2)-bicliques for 10 rounds with a privacy budget epsilon = 1 on the dataset `to`:
 
 ```bash
-make clean
+./biclique 1 ../bidata/to 10 1 3 2
+```
+
+3. Run the advanced++ algorithm to count (3,2)-bicliques for 10 rounds with a privacy budget epsilon = 1 on the dataset `unicode`:
+
+```bash
+./biclique 1 ../bidata/unicode 10 4 3 2
 ```
